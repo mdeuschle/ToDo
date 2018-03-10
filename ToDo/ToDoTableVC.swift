@@ -14,6 +14,16 @@ class ToDoTableVC: UITableViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        configBarButtonItem()
+    }
+
+    private func configBarButtonItem() {
+        let button = UIBarButtonItem(barButtonSystemItem: .add, target: self, action: #selector(addButtonTapped))
+        navigationItem.rightBarButtonItem = button
+    }
+
+    @objc private func addButtonTapped() {
+        print("BUTTON TAPPED")
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
