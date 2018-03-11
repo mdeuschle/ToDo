@@ -10,15 +10,11 @@ import UIKit
 
 class ToDoTableVC: UITableViewController {
 
-    var testArray = ["Buy Eggs", "Play Golf", "Eat Lunch"]
-    let userDefaults = UserDefaults.standard
+    var items = [Item]()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configBarButtonItem()
-        if let toDoList = userDefaults.array(forKey: "ToDoList") as? [String] {
-            testArray = toDoList
-        }
     }
 
     private func configBarButtonItem() {
@@ -29,26 +25,31 @@ class ToDoTableVC: UITableViewController {
     @objc private func addButtonTapped() {
         Alert(viewController: self).addAlert { textField in
             if let textFieldText = textField.text {
-                self.testArray.append(textFieldText)
-                self.userDefaults.set(self.testArray, forKey: "ToDoList")
-                self.tableView.reloadData()
+                if let item = Item(name: textFieldText) {
+                    self.items.append(item)
+                    self.tableView.reloadData()
+                }
             }
         }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return testArray.count
+        return items.count
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath)
-        cell.textLabel?.text = testArray[indexPath.row]
+        let item = items[indexPath.row]
+        cell.textLabel?.text = item.name
+        cell.accessoryType = item.isSelected ? .checkmark : .none
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if let cell = tableView.cellForRow(at: indexPath) {
             cell.accessoryType = cell.accessoryType == .checkmark ? .none : .checkmark
+            let item = items[indexPath.row]
+            item.isSelected = cell.accessoryType == .checkmark ? true : false
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
