@@ -11,10 +11,14 @@ import UIKit
 class ToDoTableVC: UITableViewController {
 
     var testArray = ["Buy Eggs", "Play Golf", "Eat Lunch"]
+    let userDefaults = UserDefaults.standard
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configBarButtonItem()
+        if let toDoList = userDefaults.array(forKey: "ToDoList") as? [String] {
+            testArray = toDoList
+        }
     }
 
     private func configBarButtonItem() {
@@ -26,6 +30,8 @@ class ToDoTableVC: UITableViewController {
         Alert(viewController: self).addAlert { textField in
             if let textFieldText = textField.text {
                 self.testArray.append(textFieldText)
+                self.userDefaults.set(self.testArray, forKey: "ToDoList")
+                self.tableView.reloadData()
             }
         }
     }
