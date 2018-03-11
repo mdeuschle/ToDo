@@ -43,6 +43,7 @@
 			isa = PBXGroup;
 			children = (
 				A8CED83220547EB9004E7F5B /* ToDo */,
+				A8CED84E2054E0A1004E7F5B /* SupportingFiles */,
 				A8CED83120547EB9004E7F5B /* Products */,
 			);
 			sourceTree = "<group>";
@@ -62,8 +63,6 @@
 				A8CED84620549C50004E7F5B /* View */,
 				A8CED84520549C46004E7F5B /* Controller */,
 				A8CED83320547EB9004E7F5B /* AppDelegate.swift */,
-				A8CED83A20547EB9004E7F5B /* Assets.xcassets */,
-				A8CED83C20547EB9004E7F5B /* LaunchScreen.storyboard */,
 				A8CED83F20547EB9004E7F5B /* Info.plist */,
 			);
 			path = ToDo;
@@ -92,6 +91,15 @@
 				A8CED84C2054D21B004E7F5B /* Item.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		A8CED84E2054E0A1004E7F5B /* SupportingFiles */ = {
+			isa = PBXGroup;
+			children = (
+				A8CED83C20547EB9004E7F5B /* LaunchScreen.storyboard */,
+				A8CED83A20547EB9004E7F5B /* Assets.xcassets */,
+			);
+			path = SupportingFiles;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

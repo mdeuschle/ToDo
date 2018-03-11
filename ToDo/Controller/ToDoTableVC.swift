@@ -46,11 +46,9 @@ class ToDoTableVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let cell = tableView.cellForRow(at: indexPath) {
-            cell.accessoryType = cell.accessoryType == .checkmark ? .none : .checkmark
-            let item = items[indexPath.row]
-            item.isSelected = cell.accessoryType == .checkmark ? true : false
-        }
+        let item = items[indexPath.row]
+        item.isSelected = !item.isSelected
+        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
