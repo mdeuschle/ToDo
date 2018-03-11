@@ -19,6 +19,15 @@ class ToDoTableVC: UITableViewController {
         super.viewDidLoad()
         configBarButtonItem()
         loadItems()
+        configureSearch()
+    }
+
+    private func configureSearch() {
+        let searchController = UISearchController(searchResultsController: nil)
+        searchController.searchResultsUpdater = self
+        searchController.delegate = self
+        navigationItem.searchController = searchController
+        navigationItem.hidesSearchBarWhenScrolling = false
     }
 
     private func configBarButtonItem() {
@@ -67,10 +76,25 @@ class ToDoTableVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = items[indexPath.row]
         item.isSelected = !item.isSelected
-//        context.delete(item)
-//        items.remove(at: indexPath.row)
+        //        context.delete(item)
+        //        items.remove(at: indexPath.row)
         saveItems()
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+}
+
+extension ToDoTableVC: UISearchControllerDelegate, UISearchResultsUpdating {
+
+    func updateSearchResults(for searchController: UISearchController) {
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        request.predicate = NSPredicate(format: "name CONTAINS %@", searchController.searchBar.text!)
+        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        do {
+            items = try context.fetch(request)
+        } catch {
+            print(error)
+        }
+        tableView.reloadData()
     }
 }
 
