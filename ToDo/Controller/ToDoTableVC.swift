@@ -23,7 +23,11 @@ class ToDoTableVC: UITableViewController {
     }
 
     @objc private func addButtonTapped() {
-        print("BUTTON TAPPED")
+        Alert(viewController: self).addAlert { textField in
+            if let textFieldText = textField.text {
+                self.testArray.append(textFieldText)
+            }
+        }
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
