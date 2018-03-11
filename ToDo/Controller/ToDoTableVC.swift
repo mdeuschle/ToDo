@@ -11,10 +11,12 @@ import UIKit
 class ToDoTableVC: UITableViewController {
 
     var items = [Item]()
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
 
     override func viewDidLoad() {
         super.viewDidLoad()
         configBarButtonItem()
+        loadItems()
     }
 
     private func configBarButtonItem() {
@@ -27,10 +29,29 @@ class ToDoTableVC: UITableViewController {
             if let textFieldText = textField.text {
                 if let item = Item(name: textFieldText) {
                     self.items.append(item)
-                    self.tableView.reloadData()
+                    self.saveItems()
                 }
             }
         }
+    }
+
+    private func saveItems() {
+        let encoder = PropertyListEncoder()
+        guard let data = try? encoder.encode(self.items),
+            let dataFilePath = self.dataFilePath else {
+                return
+        }
+        try? data.write(to: dataFilePath)
+        tableView.reloadData()
+    }
+
+    private func loadItems() {
+        let decoder = PropertyListDecoder()
+        guard let dataFilePath = self.dataFilePath,
+            let data = try? Data(contentsOf: dataFilePath) else {
+                return
+        }
+        items = try! decoder.decode([Item].self, from: data)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -48,7 +69,7 @@ class ToDoTableVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = items[indexPath.row]
         item.isSelected = !item.isSelected
-        tableView.reloadData()
+        saveItems()
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
