@@ -7,11 +7,13 @@
 //
 
 import UIKit
+import CoreData
 
 class ToDoTableVC: UITableViewController {
 
     var items = [Item]()
     let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,31 +29,27 @@ class ToDoTableVC: UITableViewController {
     @objc private func addButtonTapped() {
         Alert(viewController: self).addAlert { textField in
             if let textFieldText = textField.text {
-                if let item = Item(name: textFieldText) {
-                    self.items.append(item)
-                    self.saveItems()
-                }
+                let item = Item(context: self.context)
+                item.name = textFieldText
+                item.isSelected = false
+                self.items.append(item)
+                self.saveItems()
             }
         }
     }
 
     private func saveItems() {
-        let encoder = PropertyListEncoder()
-        guard let data = try? encoder.encode(self.items),
-            let dataFilePath = self.dataFilePath else {
-                return
-        }
-        try? data.write(to: dataFilePath)
+        try? context.save()
         tableView.reloadData()
     }
 
     private func loadItems() {
-        let decoder = PropertyListDecoder()
-        guard let dataFilePath = self.dataFilePath,
-            let data = try? Data(contentsOf: dataFilePath) else {
-                return
+        let request: NSFetchRequest<Item> = Item.fetchRequest()
+        do {
+            items = try context.fetch(request)
+        } catch {
+            print(error)
         }
-        items = try! decoder.decode([Item].self, from: data)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -69,6 +67,8 @@ class ToDoTableVC: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let item = items[indexPath.row]
         item.isSelected = !item.isSelected
+//        context.delete(item)
+//        items.remove(at: indexPath.row)
         saveItems()
         tableView.deselectRow(at: indexPath, animated: true)
     }
