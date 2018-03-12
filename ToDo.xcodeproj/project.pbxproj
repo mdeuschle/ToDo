@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		A89449A22055A1E300D25026 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A89449A02055A1E300D25026 /* DataModel.xcdatamodeld */; };
+		A89449C92056087800D25026 /* CategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89449C82056087800D25026 /* CategoryVC.swift */; };
 		A8CED83420547EB9004E7F5B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CED83320547EB9004E7F5B /* AppDelegate.swift */; };
 		A8CED83620547EB9004E7F5B /* ToDoTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CED83520547EB9004E7F5B /* ToDoTableVC.swift */; };
 		A8CED83920547EB9004E7F5B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A8CED83720547EB9004E7F5B /* Main.storyboard */; };
@@ -18,6 +19,7 @@
 
 /* Begin PBXFileReference section */
 		A89449A12055A1E300D25026 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		A89449C82056087800D25026 /* CategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryVC.swift; sourceTree = "<group>"; };
 		A8CED83020547EB9004E7F5B /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8CED83320547EB9004E7F5B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A8CED83520547EB9004E7F5B /* ToDoTableVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToDoTableVC.swift; sourceTree = "<group>"; };
@@ -71,6 +73,7 @@
 		A8CED84520549C46004E7F5B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A89449C82056087800D25026 /* CategoryVC.swift */,
 				A8CED83520547EB9004E7F5B /* ToDoTableVC.swift */,
 				A8CED84A2054B68E004E7F5B /* Alert.swift */,
 			);
@@ -174,6 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A89449C92056087800D25026 /* CategoryVC.swift in Sources */,
 				A89449A22055A1E300D25026 /* DataModel.xcdatamodeld in Sources */,
 				A8CED84B2054B68E004E7F5B /* Alert.swift in Sources */,
 				A8CED83620547EB9004E7F5B /* ToDoTableVC.swift in Sources */,
