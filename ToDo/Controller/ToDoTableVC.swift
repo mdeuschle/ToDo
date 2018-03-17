@@ -12,6 +12,11 @@ import CoreData
 class ToDoTableVC: UITableViewController {
 
     private var items = [Item]()
+    var selectedCategory: Category? {
+        didSet {
+            loadItems()
+        }
+    }
     private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
@@ -40,6 +45,7 @@ class ToDoTableVC: UITableViewController {
                 let item = Item(context: self.context)
                 item.name = textFieldText
                 item.isSelected = false
+                item.parentCategory = self.selectedCategory
                 self.items.append(item)
                 self.saveItems()
             }
@@ -51,7 +57,11 @@ class ToDoTableVC: UITableViewController {
         tableView.reloadData()
     }
 
-    private func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) {
+    private func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
+        let categoryPredicate = NSPredicate(format: "parentCategory.categoryName MATCHES %@", selectedCategory!.categoryName!)
+        let unwrappedPredicate = predicate ?? categoryPredicate
+        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [unwrappedPredicate, categoryPredicate])
+        request.predicate = compoundPredicate
         do {
             items = try context.fetch(request)
         } catch {
@@ -84,9 +94,9 @@ extension ToDoTableVC: UISearchControllerDelegate, UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
         let request: NSFetchRequest<Item> = Item.fetchRequest()
-        request.predicate = NSPredicate(format: "name CONTAINS %@", searchController.searchBar.text!)
+        let predicate = NSPredicate(format: "name CONTAINS %@", searchController.searchBar.text!)
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        loadItems(with: request)
+        loadItems(with: request, predicate: predicate)
         do {
             items = try context.fetch(request)
         } catch {
