@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 
-class ToDoTableVC: UITableViewController {
+class ToDoTableVC: SwipeTableVC {
 
     private var toDoItems: Results<Item>?
     let realm = try! Realm()
@@ -68,7 +68,7 @@ class ToDoTableVC: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let item = toDoItems?[indexPath.row] {
             cell.textLabel?.text = item.title
             cell.accessoryType = item.done ? .checkmark : .none
@@ -91,12 +91,23 @@ class ToDoTableVC: UITableViewController {
         tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
+
+    override func updateModel(at indexPath: IndexPath) {
+        if let toDoItems = self.toDoItems {
+            do {
+                try self.realm.write {
+                    self.realm.delete(toDoItems[indexPath.row])
+                }
+            } catch {
+                print(error)
+            }
+        }
+    }
 }
 
 extension ToDoTableVC: UISearchControllerDelegate, UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
-
         toDoItems = toDoItems?.filter("title CONTAINS[cd] %@", searchController.searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
         tableView.reloadData()
         if searchController.searchBar.text!.isEmpty {
