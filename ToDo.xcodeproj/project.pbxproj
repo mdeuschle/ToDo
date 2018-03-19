@@ -8,7 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		0FDF968A21F7FDC1ECC6822C /* Pods_ToDo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = FF8FAEE67DE752735A3C248A /* Pods_ToDo.framework */; };
-		A89449A22055A1E300D25026 /* DataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A89449A02055A1E300D25026 /* DataModel.xcdatamodeld */; };
+		A84EE831205EE82F00916BAF /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84EE830205EE82F00916BAF /* Item.swift */; };
+		A84EE833205EE83B00916BAF /* Category.swift in Sources */ = {isa = PBXBuildFile; fileRef = A84EE832205EE83B00916BAF /* Category.swift */; };
 		A89449C92056087800D25026 /* CategoryVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A89449C82056087800D25026 /* CategoryVC.swift */; };
 		A8CED83420547EB9004E7F5B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CED83320547EB9004E7F5B /* AppDelegate.swift */; };
 		A8CED83620547EB9004E7F5B /* ToDoTableVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8CED83520547EB9004E7F5B /* ToDoTableVC.swift */; };
@@ -21,7 +22,8 @@
 /* Begin PBXFileReference section */
 		025AAB1CDEE854419F1345B4 /* Pods-ToDo.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDo.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ToDo/Pods-ToDo.debug.xcconfig"; sourceTree = "<group>"; };
 		741EEA733C93511320CDDC3D /* Pods-ToDo.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ToDo.release.xcconfig"; path = "Pods/Target Support Files/Pods-ToDo/Pods-ToDo.release.xcconfig"; sourceTree = "<group>"; };
-		A89449A12055A1E300D25026 /* DataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = DataModel.xcdatamodel; sourceTree = "<group>"; };
+		A84EE830205EE82F00916BAF /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
+		A84EE832205EE83B00916BAF /* Category.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Category.swift; sourceTree = "<group>"; };
 		A89449C82056087800D25026 /* CategoryVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryVC.swift; sourceTree = "<group>"; };
 		A8CED83020547EB9004E7F5B /* ToDo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ToDo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A8CED83320547EB9004E7F5B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -106,7 +108,8 @@
 		A8CED84720549C57004E7F5B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				A89449A02055A1E300D25026 /* DataModel.xcdatamodeld */,
+				A84EE832205EE83B00916BAF /* Category.swift */,
+				A84EE830205EE82F00916BAF /* Item.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -253,10 +256,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				A89449C92056087800D25026 /* CategoryVC.swift in Sources */,
-				A89449A22055A1E300D25026 /* DataModel.xcdatamodeld in Sources */,
 				A8CED84B2054B68E004E7F5B /* Alert.swift in Sources */,
 				A8CED83620547EB9004E7F5B /* ToDoTableVC.swift in Sources */,
+				A84EE831205EE82F00916BAF /* Item.swift in Sources */,
 				A8CED83420547EB9004E7F5B /* AppDelegate.swift in Sources */,
+				A84EE833205EE83B00916BAF /* Category.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -393,6 +397,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 025AAB1CDEE854419F1345B4 /* Pods-ToDo.debug.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3DKZWJ5854;
@@ -409,6 +414,7 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 741EEA733C93511320CDDC3D /* Pods-ToDo.release.xcconfig */;
 			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 3DKZWJ5854;
@@ -443,19 +449,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCVersionGroup section */
-		A89449A02055A1E300D25026 /* DataModel.xcdatamodeld */ = {
-			isa = XCVersionGroup;
-			children = (
-				A89449A12055A1E300D25026 /* DataModel.xcdatamodel */,
-			);
-			currentVersion = A89449A12055A1E300D25026 /* DataModel.xcdatamodel */;
-			path = DataModel.xcdatamodeld;
-			sourceTree = "<group>";
-			versionGroupType = wrapper.xcdatamodel;
-		};
-/* End XCVersionGroup section */
 	};
 	rootObject = A8CED82820547EB9004E7F5B /* Project object */;
 }

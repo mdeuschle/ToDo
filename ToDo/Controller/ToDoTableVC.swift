@@ -7,17 +7,18 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class ToDoTableVC: UITableViewController {
 
-    private var items = [Item]()
+    private var toDoItems: Results<Item>?
+    let realm = try! Realm()
+
     var selectedCategory: Category? {
         didSet {
             loadItems()
         }
     }
-    private let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -41,51 +42,53 @@ class ToDoTableVC: UITableViewController {
 
     @objc private func addButtonTapped() {
         Alert(viewController: self).addAlert { textField in
-            if let textFieldText = textField.text {
-                let item = Item(context: self.context)
-                item.name = textFieldText
-                item.isSelected = false
-                item.parentCategory = self.selectedCategory
-                self.items.append(item)
-                self.saveItems()
+            if let textFieldText = textField.text, let currentCategory = self.selectedCategory {
+                do {
+                    try self.realm.write {
+                        let item = Item()
+                        item.title = textFieldText
+                        item.dateCreated = Date()
+                        currentCategory.items.append(item)
+                    }
+                } catch {
+                    print(error)
+                }
             }
+            self.tableView.reloadData()
         }
     }
 
-    private func saveItems() {
-        try? context.save()
-        tableView.reloadData()
-    }
-
-    private func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest(), predicate: NSPredicate? = nil) {
-        let categoryPredicate = NSPredicate(format: "parentCategory.categoryName MATCHES %@", selectedCategory!.categoryName!)
-        let unwrappedPredicate = predicate ?? categoryPredicate
-        let compoundPredicate = NSCompoundPredicate(andPredicateWithSubpredicates: [unwrappedPredicate, categoryPredicate])
-        request.predicate = compoundPredicate
-        do {
-            items = try context.fetch(request)
-        } catch {
-            print(error)
-        }
+    private func loadItems() {
+        toDoItems = selectedCategory?.items.sorted(byKeyPath: "title", ascending: true)
         tableView.reloadData()
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items.count
+        return toDoItems?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoCell", for: indexPath)
-        let item = items[indexPath.row]
-        cell.textLabel?.text = item.name
-        cell.accessoryType = item.isSelected ? .checkmark : .none
+        if let item = toDoItems?[indexPath.row] {
+            cell.textLabel?.text = item.title
+            cell.accessoryType = item.done ? .checkmark : .none
+        } else {
+            cell.textLabel?.text = "No Items Added"
+        }
         return cell
     }
 
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let item = items[indexPath.row]
-        item.isSelected = !item.isSelected
-        saveItems()
+        if let item = toDoItems?[indexPath.row] {
+            do {
+                try realm.write {
+                    item.done = !item.done
+                }
+            } catch {
+                print(error)
+            }
+        }
+        tableView.reloadData()
         tableView.deselectRow(at: indexPath, animated: true)
     }
 }
@@ -93,15 +96,9 @@ class ToDoTableVC: UITableViewController {
 extension ToDoTableVC: UISearchControllerDelegate, UISearchResultsUpdating {
 
     func updateSearchResults(for searchController: UISearchController) {
-        let request: NSFetchRequest<Item> = Item.fetchRequest()
-        let predicate = NSPredicate(format: "name CONTAINS %@", searchController.searchBar.text!)
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        loadItems(with: request, predicate: predicate)
-        do {
-            items = try context.fetch(request)
-        } catch {
-            print(error)
-        }
+
+        toDoItems = toDoItems?.filter("title CONTAINS[cd] %@", searchController.searchBar.text!).sorted(byKeyPath: "dateCreated", ascending: true)
+        tableView.reloadData()
         if searchController.searchBar.text!.isEmpty {
             loadItems()
         }

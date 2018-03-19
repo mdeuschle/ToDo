@@ -7,12 +7,13 @@
 //
 
 import UIKit
-import CoreData
+import RealmSwift
 
 class CategoryVC: UITableViewController {
 
-    private var categories = [Category]()
-    private var context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+    let realm = try! Realm()
+
+    private var categories: Results<Category>?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,38 +29,34 @@ class CategoryVC: UITableViewController {
     @objc private func addButtonTapped() {
         Alert(viewController: self).addAlert { textField in
             if let textFieldText = textField.text {
-                let category = Category(context: self.context)
-                category.categoryName = textFieldText
-                self.categories.append(category)
-                self.save()
+                let category = Category()
+                category.name = textFieldText
+                self.save(category: category)
             }
         }
     }
 
-    private func save() {
-        try? context.save()
+    private func save(category: Category) {
+        try? realm.write {
+            realm.add(category)
+        }
         tableView.reloadData()
     }
 
-    private func loadCategories(with request: NSFetchRequest<Category> = Category.fetchRequest()) {
-        do {
-            categories = try context.fetch(request)
-        } catch {
-            print(error)
-        }
+    private func loadCategories() {
+        categories = realm.objects(Category.self)
         tableView.reloadData()
     }
 
     //Mark: Datasource methods
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return categories.count
+        return categories?.count ?? 1
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryCell", for: indexPath)
-        let category = categories[indexPath.row]
-        cell.textLabel?.text = category.categoryName
+        cell.textLabel?.text = categories?[indexPath.row].name ?? "No Categories Added Yet"
         return cell
     }
 
@@ -73,7 +70,7 @@ class CategoryVC: UITableViewController {
         if segue.identifier == "GoToItems" {
             if let destinationVC = segue.destination as? ToDoTableVC,
                 let indexPath = tableView.indexPathForSelectedRow {
-                destinationVC.selectedCategory = categories[indexPath.row]
+                destinationVC.selectedCategory = categories?[indexPath.row]
             }
         }
     }
