@@ -73,10 +73,11 @@ class ToDoTableVC: SwipeTableVC {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let item = toDoItems?[indexPath.row] {
             let cgFloat = CGFloat(indexPath.row) / CGFloat(toDoItems!.count)
-            if let backgroundColor = UIColor.flatTeal.darken(byPercentage: cgFloat) {
+            if let backgroundColor = UIColor.flatLime.darken(byPercentage: cgFloat) {
                 cell.textLabel?.text = item.title
                 cell.accessoryType = item.done ? .checkmark : .none
                 cell.backgroundColor = backgroundColor
+                cell.textLabel?.textColor = ContrastColorOf(backgroundColor, returnFlat: true)
             }
         } else {
             cell.textLabel?.text = "No Items Added"
