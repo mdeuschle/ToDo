@@ -73,7 +73,9 @@ class ToDoTableVC: SwipeTableVC {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let item = toDoItems?[indexPath.row] {
             let cgFloat = CGFloat(indexPath.row) / CGFloat(toDoItems!.count)
-            if let backgroundColor = UIColor.flatLime.darken(byPercentage: cgFloat) {
+            if let selectedCategory = selectedCategory,
+                let categoryColor = UIColor(hexString: selectedCategory.hexColor),
+                let backgroundColor = categoryColor.darken(byPercentage: cgFloat) {
                 cell.textLabel?.text = item.title
                 cell.accessoryType = item.done ? .checkmark : .none
                 cell.backgroundColor = backgroundColor
