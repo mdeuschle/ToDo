@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import ChameleonFramework
 
 class ToDoTableVC: SwipeTableVC {
 
@@ -25,6 +26,7 @@ class ToDoTableVC: SwipeTableVC {
         configBarButtonItem()
         loadItems()
         configureSearch()
+        tableView.separatorStyle = .none
     }
 
     private func configureSearch() {
@@ -70,8 +72,12 @@ class ToDoTableVC: SwipeTableVC {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
         if let item = toDoItems?[indexPath.row] {
-            cell.textLabel?.text = item.title
-            cell.accessoryType = item.done ? .checkmark : .none
+            let cgFloat = CGFloat(indexPath.row) / CGFloat(toDoItems!.count)
+            if let backgroundColor = UIColor.flatTeal.darken(byPercentage: cgFloat) {
+                cell.textLabel?.text = item.title
+                cell.accessoryType = item.done ? .checkmark : .none
+                cell.backgroundColor = backgroundColor
+            }
         } else {
             cell.textLabel?.text = "No Items Added"
         }
