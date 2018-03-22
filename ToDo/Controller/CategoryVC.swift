@@ -71,9 +71,11 @@ class CategoryVC: SwipeTableVC {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = super.tableView(tableView, cellForRowAt: indexPath)
-        if let categories = categories?[indexPath.row] {
+        if let categories = categories?[indexPath.row],
+            let categoriesColor = UIColor(hexString: categories.hexColor) {
+            cell.backgroundColor = categoriesColor
             cell.textLabel?.text = categories.name
-            cell.backgroundColor = UIColor(hexString: categories.hexColor)
+            cell.textLabel?.textColor = ContrastColorOf(categoriesColor, returnFlat: true)
         }
         return cell
     }

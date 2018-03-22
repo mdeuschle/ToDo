@@ -29,6 +29,27 @@ class ToDoTableVC: SwipeTableVC {
         tableView.separatorStyle = .none
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        if let selectedCategory = selectedCategory {
+            updateNavigationBar(with: selectedCategory.hexColor)
+        }
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        updateNavigationBar(with: "008080")
+    }
+
+    // MARK: - Private Methods
+
+    private func updateNavigationBar(with hexCodeColor: String) {
+        if let navigationController = navigationController,
+            let hexColor = UIColor(hexString: hexCodeColor) {
+            navigationController.navigationBar.barTintColor = hexColor
+            navigationController.navigationBar.tintColor = ContrastColorOf(hexColor, returnFlat: true)
+            navigationController.navigationBar.largeTitleTextAttributes = [NSAttributedStringKey.foregroundColor: ContrastColorOf(hexColor, returnFlat: true)]
+        }
+    }
+
     private func configureSearch() {
         let searchController = UISearchController(searchResultsController: nil)
         searchController.searchResultsUpdater = self
